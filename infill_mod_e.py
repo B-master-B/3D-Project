@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # Parameters
 segmentLength = 1.0 # in [mm]
 
-with open('1d_piskota_infill_cross.gcode', 'r') as f:
+with open('etest.gcode', 'r') as f:
   gcode = f.read()
 lines = GcodeParser(gcode, True).lines
 
@@ -20,13 +20,14 @@ prevX = -9999.9
 prevY = -9999.9
 prevE = 0.0
 prevEnew = 0.0
+p = -9999.9
 
 for line in lines:
     if line.command[0] == ";" and line.comment.startswith("@AreaBegin \"Infill\""):
         inInfill = not inInfill
-        match = re.search("Z([\d.]+)", line.comment)
-        z = float(match.groups()[0]) # layer z coordinate
-        p = 1 - 0.25*(z - 1) # extrusion percentage
+        # match = re.search("Z([\d.]+)", line.comment)
+        # z = float(match.groups()[0]) # layer z coordinate
+        # p = 1 - 0.25*(z - 1) # extrusion percentage
         continue
     if not inInfill:
         continue
@@ -50,25 +51,34 @@ for line in lines:
                 deltaEnew = deltaE
             else: # extrusion -> we modify the deltaE value according to the p value
                 printing = True
+                p = (prevX - 170.0)/50.0
                 deltaEnew = deltaE * p
         
-        if printing:
-            endX = line.params['X']
-            endY = line.params['Y']
-            # we have to implement segmentation here
-            # totalLength = norm([endX, endY] - [prevX, prevY])
-            # ...
+        # if printing:
+        #     endX = line.params['X']
+        #     endY = line.params['Y']
+        #     # we have to implement segmentation here
+        #     # totalLength = norm([endX, endY] - [prevX, prevY])
+        #     # ...
 
-        else: # retraction or after retraction command
-            Enew = prevEnew + deltaEnew
-            prevEnew = Enew
-            line.update_param('E', round(Enew, 5))
+        # else: # retraction or after retraction command
+        #     Enew = prevEnew + deltaEnew
+        #     prevEnew = Enew
+        #     line.update_param('E', round(Enew, 5))
+
+        # this should be deleted when segmentation is implemented:
+        Enew = prevEnew + deltaEnew
+        prevEnew = Enew
+        line.update_param('E', round(Enew, 5))
+        # line.comment = f'prevX = {prevX}; p = {p}'
     
     if line.command_str == 'G0' or line.command_str == 'G1':
-        prevX = line.params['X']
-        prevY = line.params['Y']
+        if 'X' in line.params.keys():
+            prevX = line.params['X']
+        if 'Y' in line.params.keys():
+            prevY = line.params['Y']
 
-with open('1d_piskota_infill_cross_mod.gcode', 'w') as f:
+with open('etest_mod.gcode', 'w') as f:
     for line in lines:
         f.write(f"{line.gcode_str}\n")
 
