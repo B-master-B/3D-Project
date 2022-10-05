@@ -8,7 +8,12 @@ import matplotlib.pyplot as plt
 # Parameters
 segmentLength = 1.0 # in [mm]
 
-with open('etest.gcode', 'r') as f:
+directory = 'D:\\OneDrive - Budapesti Műszaki és Gazdaságtudományi Egyetem\\Felevek\\2022-2023-1\\Teamwork project\\projects\\'
+filename = 'etest_shell_2mm'
+filenameIn = f'{directory}{filename}.gcode'
+filenameOut = f'{directory}{filename}_mod.gcode'
+
+with open(filenameIn, 'r') as f:
   gcode = f.read()
 lines = GcodeParser(gcode, True).lines
 
@@ -51,7 +56,8 @@ for line in lines:
                 deltaEnew = deltaE
             else: # extrusion -> we modify the deltaE value according to the p value
                 printing = True
-                p = (prevX - 170.0)/50.0
+                # p = (prevX - 170.0)/50.0 # from 0 to 1
+                p = (prevX - 120.0)/100.0 # from 0.5 to 1
                 deltaEnew = deltaE * p
         
         # if printing:
@@ -78,7 +84,7 @@ for line in lines:
         if 'Y' in line.params.keys():
             prevY = line.params['Y']
 
-with open('etest_mod.gcode', 'w') as f:
+with open(filenameOut, 'w') as f:
     for line in lines:
         f.write(f"{line.gcode_str}\n")
 
