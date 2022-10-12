@@ -6,15 +6,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-from extrusionRatio import extrusionRatio
+from extrusionRatioLinear import extrusionRatioLinear
+from extrusionRatioConst import extrusionRatioConst
 
 # Parameters
 segmentMaxLength = 1.0 # in [mm]
 pmin = 0.5 # minimal extrusion ratio [%]
-pmax = 1.0 # maximal extrusion ratio [%]
+pmax = 2.0 # maximal extrusion ratio [%]
 
 directory = 'D:\\OneDrive - Budapesti Műszaki és Gazdaságtudományi Egyetem\\Felevek\\2022-2023-1\\Teamwork project\\projects\\'
-filename = 'segtest'
+filename = '1d_piskota_d50_w100_db2'
 filenameIn = f'{directory}{filename}.gcode'
 filenameOut = f'{directory}{filename}_mod.gcode'
 
@@ -84,7 +85,7 @@ for line in linesIn:
                 actStartPos = actEndPos
                 actMidPos = actStartPos + segmentVector/2
                 actEndPos = actStartPos + segmentVector
-                p = extrusionRatio(actMidPos[0], actMidPos[1], prevZ)
+                p = extrusionRatioConst(actMidPos[0], actMidPos[1], prevZ) # extrusion percentage
                 p = min(p, pmax)
                 p = max(p, pmin)
                 Enew += deltaEsegment*p

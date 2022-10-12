@@ -1,10 +1,10 @@
-def extrusionRatio(x, y, z):
+def extrusionRatioLinear(x, y, z):
     xmin = 170
     xmax = 220
     ymin = 100
     ymax = 150
 
-    pedge = 1.0
+    pedge = 2.0
     pinner = 0.5
     distmax = 20
 
