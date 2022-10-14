@@ -26,3 +26,5 @@ Getting the hang of it.
 And still going strong indeed, very strong.
 
 Sorry for the .vs folder, can't seem to get rid of it...
+Greg test
+this is a text
