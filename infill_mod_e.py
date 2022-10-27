@@ -14,7 +14,8 @@ segmentMaxLength = 1.0 # in [mm]
 pmin = 0.5 # minimal extrusion ratio [%]
 pmax = 2.0 # maximal extrusion ratio [%]
 
-directory = 'D:\\OneDrive - Budapesti Műszaki és Gazdaságtudományi Egyetem\\Felevek\\2022-2023-1\\Teamwork project\\projects\\'
+# directory = 'D:\\OneDrive - Budapesti Műszaki és Gazdaságtudományi Egyetem\\Felevek\\2022-2023-1\\Teamwork project\\projects\\'
+directory = 'C:\\Users\\Abel\\OneDrive - Budapesti Műszaki és Gazdaságtudományi Egyetem\\Felevek\\2022-2023-1\\Teamwork project\\projects\\'
 filename = '1d_piskota_d50_w100_db2'
 filenameIn = f'{directory}{filename}.gcode'
 filenameOut = f'{directory}{filename}_mod.gcode'
