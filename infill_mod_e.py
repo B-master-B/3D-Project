@@ -33,8 +33,12 @@ def modify_infill(filenameIn, filenameOut, extRatioFcn, segmentMaxLength = 1.0, 
         Enew = 0.0
 
         linesOut = []
+        lineNumber = 0
 
         for line in linesIn:
+            lineNumber += 1
+            if lineNumber % 1 == 0:
+                print(f'Processing line {lineNumber}...')
             writeOrigCmd = True
             if line.command[0] == ";" and line.comment.startswith("@AreaBegin \"Infill\""):
                 inInfill = not inInfill

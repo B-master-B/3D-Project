@@ -3,9 +3,10 @@ import numpy as np
 from scipy.interpolate import griddata
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+import math
 
 class StressInterpolator2D:
-    def __init__(self, filename, plane = 'xy'):
+    def __init__(self, filename, plane='xy'):
         match plane:
             case 'xy':
                 col1 = 1
@@ -43,12 +44,16 @@ class StressInterpolator2D:
     def show(self, s = 1.0, alpha = 1.0):
         fig = plt.figure()
         ax = fig.add_subplot()
-        ax.scatter(self.points[:, 0], self.points[:, 1], s=s, alpha=alpha, c=self.stresses, cmap=cm.jet)
+        sc = ax.scatter(self.points[:, 0], self.points[:, 1], s=s, alpha=alpha, c=self.stresses, cmap=cm.jet, vmin=0.0, vmax=40.0)
         ax.set_xlabel(self.xlab)
         ax.set_ylabel(self.ylab)
         ax.axis('equal')
         ax.grid()
+        plt.colorbar(sc)
         plt.show()
     
     def interpolate(self, val1, val2, method='linear'):
-        return griddata(self.points, self.stresses, (val1, val2), method=method)
+        stress = griddata(self.points, self.stresses, (val1, val2), method=method)
+        if math.isnan(stress):
+            print('nan')
+        return stress
