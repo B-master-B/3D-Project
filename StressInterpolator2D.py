@@ -54,6 +54,6 @@ class StressInterpolator2D:
     
     def interpolate(self, val1, val2, method='linear'):
         stress = griddata(self.points, self.stresses, (val1, val2), method=method)
-        if math.isnan(stress):
-            print('nan')
+        # if math.isnan(stress):
+        #     print('nan')
         return stress

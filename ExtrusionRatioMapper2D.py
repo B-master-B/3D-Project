@@ -1,3 +1,4 @@
+import numpy as np
 from StressInterpolator2D import StressInterpolator2D
 
 class ExtrusionRatioMapper2D:
@@ -33,16 +34,20 @@ class ExtrusionRatioMapper2D:
         The linear mapping coefficients p0 [1] and p1 [1/MPa] have to be configured first
         using the function config_linear.
         """
+        xr = np.array(x) - self.x_off
+        yr = np.array(y) - self.y_off
+        zr = np.array(z) - self.z_off
+
         match self.plane:
             case 'xy':
-                val1 = x - self.x_off
-                val2 = y - self.y_off
+                val1 = xr
+                val2 = yr
             case 'yz':
-                val1 = y - self.y_off
-                val2 = z - self.z_off
+                val1 = yr
+                val2 = zr
             case 'xz':
-                val1 = x - self.x_off
-                val2 = z - self.z_off
+                val1 = xr
+                val2 = zr
         stress = self.interpolator.interpolate(val1, val2)
         p = self.p0 + self.p1*stress
-        return float(p)
+        return p
