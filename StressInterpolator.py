@@ -7,17 +7,14 @@ import matplotlib.cm as cm
 class StressInterpolator:
     def __init__(self, filename):
         with open(filename, newline='') as csvfile:
-            self.npoint = sum(1 for row in csvfile) - 1
+            csvfile.readline()
+            csvreader = csv.reader(csvfile, delimiter='\t')
+            self.npoint = max(int(row[0]) for row in csvreader)
             self.points = np.empty([self.npoint, 3])
             self.stresses = np.empty(self.npoint)
             csvfile.seek(0)
-            csvreader = csv.reader(csvfile, delimiter='\t')
             next(csvreader) # skip first row (header)
-            rownum = 0
             for row in csvreader:
-                rownum += 1
-                if rownum > self.npoint:
-                    break
                 id = int(row[0])
                 self.points[id - 1, 0] = float(row[1].replace(',','.'))
                 self.points[id - 1, 1] = float(row[2].replace(',','.'))
@@ -67,9 +64,5 @@ class StressInterpolator:
         ax.grid()
         plt.show()
     
-    def interpolate(self, x, y, z):
-        return griddata(self.points, self.stresses, (x, y, z), method='linear')
-                
-intrp = StressInterpolator('RESULTS\\biax\\rombusz_equiv_stress.txt')
-intrp.show(view3d=False, plane='xz', offset=-5.0, range=0.2, s=1.0, alpha=1.0)
-print(intrp.interpolate(0.0, 0.0, 0.0))
+    def interpolate(self, x, y, z, method='linear'):
+        return griddata(self.points, self.stresses, (x, y, z), method=method)
