@@ -29,8 +29,12 @@ interpolator = StressInterpolator2D('RESULTS\\rombusz_equiv_stress_2D_15MPa.txt'
 # p1 = 1.5 # [1]
 
 # Map 5
+# p0 = 0 # [1]
+# p1 = 2 # [1]
+
+# Map 6
 p0 = 0 # [1]
-p1 = 2 # [1]
+p1 = 2.6667 # [1]
 
 offsets = (195.0, 125.0, 0.0)
 periods = (80.0, 10000.0, 10000.0)
