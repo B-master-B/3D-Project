@@ -1,8 +1,9 @@
 import numpy as np
 from StressInterpolator2D import StressInterpolator2D
+from mod_between import mod_between
 
 class ExtrusionRatioMapper2D:
-    def __init__(self, interpolator: StressInterpolator2D, offsets: tuple[float, float, float], plane='xy'):
+    def __init__(self, interpolator: StressInterpolator2D, offsets: tuple[float, float, float], periods: tuple[float, float, float], plane='xy'):
         """Creates an ExtrusionRatioMapper2D instance, which defines the extrusion percentage 
         of a 3D printed part at an arbitrary position based on a 2D stress map.
         The 2D stress map is provided via an interpolator instance.
@@ -20,23 +21,27 @@ class ExtrusionRatioMapper2D:
         self.x_off = offsets[0]
         self.y_off = offsets[1]
         self.z_off = offsets[2]
+        self.x_per = periods[0]
+        self.y_per = periods[1]
+        self.z_per = periods[2]
     
     def config_linear(self, p0: float, p1: float) -> None:
-        """Configurates the linear mapping coefficients p0 [1] and p1 [1/MPa] for
-        p = p0 + p1*stress, where p is the extrusion percentage [-] and stress [MPa].
+        """Configurates the linear mapping coefficients p0 and p1 for
+        p = p0 + p1*sigmabar, where p is the extrusion percentage [-]
+        and sigmabar is dimensionless stress [-].
         """
         self.p0 = p0
         self.p1 = p1
     
     def map_linear(self, x: float, y: float, z: float) -> float:
         """Defines the extrusion percentage p for a 2D stress map as a linear function
-        of the interpolated stress value at the given (x,y,z) location as p = p0 + p1*stress.
-        The linear mapping coefficients p0 [1] and p1 [1/MPa] have to be configured first
+        of the interpolated dimensionless stress value at the given (x,y,z) location as p = p0 + p1*sigmabar.
+        The linear mapping coefficients p0 [1] and p1 [1] have to be configured first
         using the function config_linear.
         """
-        xr = np.array(x) - self.x_off
-        yr = np.array(y) - self.y_off
-        zr = np.array(z) - self.z_off
+        xr = mod_between(np.array(x) - self.x_off, self.x_per)
+        yr = mod_between(np.array(y) - self.y_off, self.y_per)
+        zr = mod_between(np.array(z) - self.z_off, self.z_per)
 
         match self.plane:
             case 'xy':
@@ -49,5 +54,7 @@ class ExtrusionRatioMapper2D:
                 val1 = xr
                 val2 = zr
         stress = self.interpolator.interpolate(val1, val2)
-        p = self.p0 + self.p1*stress
+        max_stress = self.interpolator.max_stress()
+        dimless_stress = stress / max_stress
+        p = self.p0 + self.p1*dimless_stress
         return p
