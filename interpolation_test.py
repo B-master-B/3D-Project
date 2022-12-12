@@ -43,7 +43,7 @@ def test_StressInterpolator():
 
 def test_StressInterpolator2D():
     intrp = StressInterpolator2D('RESULTS\\rombusz_equiv_stress_2D_15MPa.txt', plane='xy')
-    intrp.show(s=1.0, alpha=1.0)
+    intrp.show(s=1.0, alpha=1.0, sigma_max=80)
 
     grid_x, grid_y = np.mgrid[-35:35:100j, -55:55:100j]
     grid_0 = intrp.interpolate(grid_x, grid_y, method='nearest')

@@ -2,7 +2,7 @@ from gcodeparser import GcodeParser
 import numpy as np
 import math
 
-def modify_infill(filenameIn, filenameOut, extRatioFcn, segmentMaxLength = 1.0, pmin=0.5, pmax=2.0):
+def modify_infill(filenameIn, filenameOut, extRatioFcn, segmentMaxLength = 1.0, pmin = 0.5, pmax = 2.0):
     """Modify the infill of a 3D printer GCode by altering the extrusion percentage.
 
     filenameIn -- GCode file to process

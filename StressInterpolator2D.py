@@ -41,10 +41,10 @@ class StressInterpolator2D:
                 self.points[id - 1, 1] = float(row[col2].replace(',','.'))
                 self.stresses[id - 1] = float(row[4].replace(',','.'))
     
-    def show(self, s = 1.0, alpha = 1.0):
+    def show(self, s = 1.0, alpha = 1.0, sigma_min = 0.0, sigma_max = 40.0):
         fig = plt.figure()
         ax = fig.add_subplot()
-        sc = ax.scatter(self.points[:, 0], self.points[:, 1], s=s, alpha=alpha, c=self.stresses, cmap=cm.jet, vmin=0.0, vmax=40.0)
+        sc = ax.scatter(self.points[:, 0], self.points[:, 1], s=s, alpha=alpha, c=self.stresses, cmap=cm.jet, vmin=sigma_min, vmax=sigma_max)
         ax.set_xlabel(self.xlab)
         ax.set_ylabel(self.ylab)
         ax.axis('equal')
@@ -57,3 +57,6 @@ class StressInterpolator2D:
         # if math.isnan(stress):
         #     print('nan')
         return stress
+    
+    def max_stress(self) -> float:
+        return max(self.stresses)
