@@ -1,9 +1,3 @@
-<style>
-body {
-    color: white;
-    background-image: linear-gradient(to bottom , #183E48, #ffffff);
-}
-</style>
 # Optimization of the infill of 3D printed parts
 
 #### created by
@@ -31,7 +25,7 @@ Weight vs strength; this question holds great opportunity for improvement, real-
 <!-- Task List -->
 * [x] Python 3.10
 * [x] ANSYS 2021 R2
-* [ ] G-code Slicer
+* [x] G-code Slicer - CraftWare Pro
 
 <!-- Images -->
 ![Flowchart](flowchart_white.png)
